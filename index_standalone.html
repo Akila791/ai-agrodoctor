@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI AgroDoctor - විද්‍යාත්මක ගොවිතැන විශේෂඥයා</title>
+    <link rel="stylesheet" href="static/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="title">
+                <span class="icon">🧠</span>
+                AI AgroDoctor
+                <span class="subtitle">විද්‍යාත්මක ගොවිතැන විශේෂඥයා</span>
+            </h1>
+            <p class="description">
+                Scientifically trained agricultural intelligence for global plant pathology diagnosis
+                <br>
+                <span class="sinhala-text">ගෝලීය ශාක රෝග විද්‍යා විනිශ්චය සඳහා විද්‍යාත්මකව පුහුණුව ලත් ගොවිතැන බුද්ධිමය ආකෘතිය</span>
+            </p>
+            <div class="training-info">
+                <p class="training-text">
+                    <strong>Trained on:</strong> PlantVillage, IPM, Kaggle Plant Disease Dataset, Regional Agricultural Research Data
+                    <br>
+                    <span class="sinhala-text"><strong>පුහුණු කරන ලද්දේ:</strong> PlantVillage, IPM, Kaggle Plant Disease Dataset, කලාපීය ගොවිතැන පර්යේෂණ දත්ත</span>
+                </p>
+                <div id="modelStatus" class="model-status">
+                    <span id="statusIndicator" class="status-indicator">🔄</span>
+                    <span id="statusText">Checking AI model status...</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="input-section">
+                <form id="plantDiagnosisForm" class="diagnosis-form">
+                    <div class="form-group">
+                        <label for="plantType" class="form-label">
+                            Plant Type / ගසේ වර්ගය
+                        </label>
+                        <select id="plantType" name="plantType" class="form-input" required>
+                            <option value="">Select plant type...</option>
+                            <option value="vegetable">Vegetable / එළවළු</option>
+                            <option value="fruit">Fruit Tree / පලතුරු ගස්</option>
+                            <option value="flower">Flower / මල්</option>
+                            <option value="herb">Herb / සුවඳ විලවුන්</option>
+                            <option value="rice">Rice / වී</option>
+                            <option value="other">Other / වෙනත්</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="symptoms" class="form-label">
+                            Symptoms Description / රෝග ලක්ෂණ විස්තරය
+                        </label>
+                        <textarea id="symptoms" name="symptoms" class="form-textarea" 
+                                placeholder="Describe the symptoms you observe... (e.g., yellow leaves, brown spots, wilting)&#10;ඔබ නිරීක්ෂණය කරන රෝග ලක්ෂණ විස්තර කරන්න..." 
+                                required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="imageUpload" class="form-label">
+                            Upload Plant Image / ගසේ ඡායාරූපය උඩුගත කරන්න
+                        </label>
+                        <div class="image-upload-container">
+                            <input type="file" id="imageUpload" name="imageUpload" 
+                                   accept="image/*" class="image-input">
+                            <label for="imageUpload" class="image-upload-label">
+                                <span class="upload-icon">📷</span>
+                                <span class="upload-text">Click to upload image / ඡායාරූපය උඩුගත කිරීමට ක්ලික් කරන්න</span>
+                            </label>
+                        </div>
+                        <div id="imagePreview" class="image-preview"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="environment" class="form-label">
+                            Environmental Conditions / පරිසර තත්වයන්
+                        </label>
+                        <textarea id="environment" name="environment" class="form-textarea" 
+                                placeholder="Describe growing conditions... (e.g., soil type, watering frequency, sunlight)&#10;වගා තත්වයන් විස්තර කරන්න..."></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        <span class="btn-icon">🧠</span>
+                        Analyze Plant Pathology / ශාක රෝග විද්‍යා විශ්ලේෂණය
+                    </button>
+                </form>
+            </div>
+
+            <div id="diagnosisResult" class="diagnosis-result" style="display: none;">
+                <div class="result-header">
+                    <h2>🧠 AI AgroDoctor Analysis / විද්‍යාත්මක විශ්ලේෂණය</h2>
+                </div>
+                <div class="result-content">
+                    <div class="plant-name-section">
+                        <h3>🌿 Plant Name:</h3>
+                        <p id="plantNameText"></p>
+                    </div>
+                    
+                    <div class="disease-section">
+                        <h3>🧠 Likely Disease / Condition:</h3>
+                        <p id="diseaseText"></p>
+                    </div>
+                    
+                    <div class="confidence-section">
+                        <h3>🔍 Confidence Level (%):</h3>
+                        <div id="confidenceLevel" class="confidence-badge"></div>
+                    </div>
+                    
+                    <div class="biological-section">
+                        <h3>🧩 Biological Explanation:</h3>
+                        <p id="biologicalText"></p>
+                    </div>
+                    
+                    <div class="treatments-section">
+                        <h3>🛠️ Recommended Actions (Treatments):</h3>
+                        <ol id="treatmentsList"></ol>
+                    </div>
+                    
+                    <div class="prevention-section">
+                        <h3>🛡️ Prevention / Future Care:</h3>
+                        <ol id="preventionList"></ol>
+                    </div>
+                    
+                    <div id="modelInfo" class="model-info" style="display: none;">
+                        <h3>🤖 AI Model Information:</h3>
+                        <p id="modelUsed"></p>
+                    </div>
+                </div>
+                
+                <button id="newDiagnosisBtn" class="new-diagnosis-btn">
+                    New Analysis / නව විශ්ලේෂණය
+                </button>
+            </div>
+
+            <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+                <div class="spinner"></div>
+                <p>Running scientific analysis... / විද්‍යාත්මක විශ්ලේෂණය කරමින්...</p>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2024 AI AgroDoctor. Scientifically trained model for educational purposes. Always consult with agricultural experts for serious plant health issues.</p>
+            <p class="sinhala-text">විද්‍යාත්මකව පුහුණුව ලත් ආකෘතියක් - අධ්‍යාපනික අරමුණු සඳහා පමණි. බරපතල ගස් සෞඛ්‍ය ගැටලු සඳහා ගොවිතැන විශේෂඥයන් සමඟ සාකච්ඡා කරන්න.</p>
+        </footer>
+    </div>
+
+    <script src="static/script_standalone.js"></script>
+</body>
+</html>
